@@ -13,7 +13,7 @@ app.use(cors())
 
 
 
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const uri = "mongodb+srv://hunterit:lYxmTPY7SrapRMuT@cluster0.dsq3s3c.mongodb.net/?retryWrites=true&w=majority";
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
@@ -33,10 +33,22 @@ async function run() {
     const productbd = client.db('product');
     const productCollection = productbd.collection('product')
 
-    app.post('/google/product',(req,res)=>{
+    app.post('/product', async (req,res)=>{
         const product = req.body;
-        const result = productCollection.insertOne(product)
+        const result = await productCollection.insertOne(product)
         res.send(result)
+    })
+
+    app.get('/product', async (req,res)=>{
+      const result = await productCollection.find().toArray();
+      res.send(result)
+    })
+    app.get('/product/:id', async (req,res)=>{
+      const id = req.params.id;
+      console.log(id);
+      const filter = {_id: new ObjectId(id)}
+      const result = await productCollection.findOne(filter);
+      res.send(result)
     })
 
 
