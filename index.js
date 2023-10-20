@@ -30,8 +30,11 @@ async function run() {
     // Connect the client to the server	(optional starting in v4.7)
     await client.connect();
 
-    const productbd = client.db('product');
-    const productCollection = productbd.collection('product')
+    const productdb = client.db('product');
+    const productCollection = productdb.collection('product')
+
+    const cartdb = client.db('cart');
+    const cartCollection = cartdb.collection('cart')
 
     app.post('/product', async (req,res)=>{
         const product = req.body;
@@ -43,6 +46,7 @@ async function run() {
       const result = await productCollection.find().toArray();
       res.send(result)
     })
+
     app.get('/product/:id', async (req,res)=>{
       const id = req.params.id;
       console.log(id);
@@ -50,6 +54,16 @@ async function run() {
       const result = await productCollection.findOne(filter);
       res.send(result)
     })
+    app.post('/cart', async (req,res)=>{
+      const product = req.body;
+      const result = await cartCollection.insertOne(product)
+      res.send(result)
+  })
+
+  app.get('/cart', async (req,res)=>{
+    const result = await cartCollection.find().toArray();
+    res.send(result)
+  })
 
 
 
@@ -67,7 +81,7 @@ run().catch(console.dir);
 
 
 app.get('/',(req,res)=>{
-    res.send('Running')
+    res.send('Running Changeed')
 })
 
 app.listen(port,()=>{
