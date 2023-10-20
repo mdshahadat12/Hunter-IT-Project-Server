@@ -54,6 +54,29 @@ async function run() {
       const result = await productCollection.findOne(filter);
       res.send(result)
     })
+
+    app.put('/product/:id', async (req,res)=>{
+      const id = req.params.id;
+      console.log(id);
+      const formValue = req.body;
+      const filter = {_id: new ObjectId(id)}
+      const options = { upsert: true };
+      const update = {
+        $set: {
+          imglink:formValue.imglink,
+          name:formValue.name,
+          Bname:formValue.Bname,
+          type:formValue.type,
+          price:formValue.price,
+          rating:formValue.rating,
+          description:formValue.description,
+        },
+      };
+      const result = await productCollection.updateOne(filter,update,options)
+      console.log(result);
+      res.send(result)
+    })
+
     app.post('/cart', async (req,res)=>{
       const product = req.body;
       const result = await cartCollection.insertOne(product)
@@ -62,6 +85,14 @@ async function run() {
 
   app.get('/cart', async (req,res)=>{
     const result = await cartCollection.find().toArray();
+    res.send(result)
+  })
+
+  app.delete('/cart/:id', async (req,res)=>{
+    const id = req.params.id;
+    console.log(id);
+    const find = {_id:id}
+    const result = await cartCollection.deleteOne(find)
     res.send(result)
   })
 
