@@ -1,7 +1,8 @@
 const express = require('express');
 const cors = require('cors');
 const app = express();
-const port = 5000;
+const port = process.env.PORT || 5000;
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 
 // hunterit
 // lYxmTPY7SrapRMuT
@@ -13,7 +14,6 @@ app.use(cors())
 
 
 
-const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const uri = "mongodb+srv://hunterit:lYxmTPY7SrapRMuT@cluster0.dsq3s3c.mongodb.net/?retryWrites=true&w=majority";
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
@@ -112,7 +112,7 @@ run().catch(console.dir);
 
 
 app.get('/',(req,res)=>{
-    res.send('Running Changeed')
+    res.send('Running Changed')
 })
 
 app.listen(port,()=>{
